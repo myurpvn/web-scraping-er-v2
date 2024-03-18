@@ -1,0 +1,234 @@
+AED:
+  countries:
+  - United Arab Emirates
+ARS:
+  countries:
+  - Argentina
+AUD:
+  countries:
+  - Nauru
+  - Cocos (Keeling) Islands
+  - Kiribati
+  - Christmas Island
+  - Australia
+  - Tuvalu
+  - Norfolk Island
+BGN:
+  countries:
+  - Bulgaria
+BHD:
+  countries:
+  - Bahrain
+BND:
+  countries:
+  - Brunei
+BRL:
+  countries:
+  - Brazil
+BWP:
+  countries:
+  - Botswana
+CAD:
+  countries:
+  - Canada
+CHF:
+  countries:
+  - Switzerland
+  - Liechtenstein
+CLP:
+  countries:
+  - Chile
+CNY:
+  countries:
+  - China
+COP:
+  countries:
+  - Colombia
+CZK:
+  countries:
+  - Czechia
+DKK:
+  countries:
+  - Greenland
+  - Denmark
+  - Faroe Islands
+EUR:
+  countries:
+  - Cyprus
+  - San Marino
+  - Luxembourg
+  - Slovakia
+  - Vatican City
+  - Mayotte
+  - Italy
+  - French Guiana
+  - Spain
+  - Ireland
+  - Croatia
+  - Estonia
+  - "\xC5land Islands"
+  - French Southern and Antarctic Lands
+  - Belgium
+  - Portugal
+  - Finland
+  - "Saint Barth\xE9lemy"
+  - Greece
+  - Austria
+  - Monaco
+  - Slovenia
+  - Saint Martin
+  - Latvia
+  - Martinique
+  - France
+  - "R\xE9union"
+  - Montenegro
+  - Guadeloupe
+  - Lithuania
+  - Saint Pierre and Miquelon
+  - Andorra
+  - Malta
+  - Kosovo
+  - Netherlands
+  - Germany
+GBP:
+  countries:
+  - United Kingdom
+  - Jersey
+  - Guernsey
+  - Saint Helena, Ascension and Tristan da Cunha
+  - Isle of Man
+HKD:
+  countries:
+  - Hong Kong
+HUF:
+  countries:
+  - Hungary
+IDR:
+  countries:
+  - Indonesia
+ILS:
+  countries:
+  - Israel
+  - Palestine
+INR:
+  countries:
+  - Bhutan
+  - India
+IRR:
+  countries:
+  - Iran
+ISK:
+  countries:
+  - Iceland
+JPY:
+  countries:
+  - Japan
+KRW:
+  countries:
+  - South Korea
+KWD:
+  countries:
+  - Kuwait
+KZT:
+  countries:
+  - Kazakhstan
+LYD:
+  countries:
+  - Libya
+MUR:
+  countries:
+  - Mauritius
+MXN:
+  countries:
+  - Mexico
+MYR:
+  countries:
+  - Malaysia
+NOK:
+  countries:
+  - Norway
+  - Svalbard and Jan Mayen
+NPR:
+  countries:
+  - Nepal
+NZD:
+  countries:
+  - Tokelau
+  - Pitcairn Islands
+  - New Zealand
+  - Cook Islands
+  - Niue
+OMR:
+  countries:
+  - Oman
+PHP:
+  countries:
+  - Philippines
+PKR:
+  countries:
+  - Pakistan
+PLN:
+  countries:
+  - Poland
+QAR:
+  countries:
+  - Qatar
+RON:
+  countries:
+  - Romania
+RUB:
+  countries:
+  - Russia
+SAR:
+  countries:
+  - Saudi Arabia
+SEK:
+  countries:
+  - Sweden
+SGD:
+  countries:
+  - Singapore
+  - Brunei
+THB:
+  countries:
+  - Thailand
+TRY:
+  countries:
+  - Turkey
+TTD:
+  countries:
+  - Trinidad and Tobago
+TWD:
+  countries:
+  - Taiwan
+USD:
+  countries:
+  - United States Minor Outlying Islands
+  - Turks and Caicos Islands
+  - Puerto Rico
+  - British Virgin Islands
+  - Ecuador
+  - Caribbean Netherlands
+  - Cambodia
+  - Guam
+  - United States Virgin Islands
+  - Timor-Leste
+  - Panama
+  - Bahamas
+  - Northern Mariana Islands
+  - British Indian Ocean Territory
+  - Marshall Islands
+  - American Samoa
+  - Palau
+  - United States
+  - El Salvador
+  - Micronesia
+VES:
+  countries:
+  - Venezuela
+ZAR:
+  countries:
+  - South Africa
+  - Eswatini
+  - Lesotho
+  - Namibia

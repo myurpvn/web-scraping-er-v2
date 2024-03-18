@@ -1,0 +1,66 @@
+from google.cloud import bigquery
+from google.oauth2.service_account import Credentials
+from datetime import datetime
+import pandas as pd
+import base64
+import json
+import os
+
+
+dataset = "exchange_rates"
+
+
+def init_bq_connection() -> tuple[Credentials, bigquery.Client]:
+    json_acct_info = json.loads(base64.b64decode(os.getenv("GOOGLE_CREDENTIALS_B64")))
+    credentials = Credentials.from_service_account_info(
+        json_acct_info,
+        scopes=["https://www.googleapis.com/auth/cloud-platform"],
+    )
+    client = bigquery.Client(
+        credentials=credentials,
+        project=credentials.project_id,
+    )
+    return [credentials, client]
+
+
+def bq_load_daily(df: pd.DataFrame, base_currency: str) -> dict[str, str]:
+    load_time = datetime.now()
+    credentials, client = init_bq_connection()
+    df["date"] = load_time.strftime("%Y-%m-%d")
+    df["bq_load_time"] = load_time
+    result = {"status": "", "error": "N/A"}
+    try:
+        table = f"{credentials.project_id}.{dataset}.daily_exchange_rate_base_{base_currency}"
+        job_config = bigquery.LoadJobConfig(
+            write_disposition="WRITE_APPEND",
+        )
+        job = client.load_table_from_dataframe(df, table, job_config=job_config)
+        job.result()
+        table = client.get_table(table)
+    except Exception as e:
+        result["status"] = "FAILED"
+        result["error"] = e
+    else:
+        result["status"] = "SUCCESS"
+
+    return result
+
+
+def bq_load_map(df: pd.DataFrame) -> dict[str, str]:
+    credentials, client = init_bq_connection()
+    result = {"status": "", "error": "N/A"}
+    try:
+        table = f"{credentials.project_id}.{dataset}.currency_country_map"
+        job_config = bigquery.LoadJobConfig(
+            write_disposition="WRITE_TRUNCATE",
+        )
+        job = client.load_table_from_dataframe(df, table, job_config=job_config)
+        job.result()
+        table = client.get_table(table)
+    except Exception as e:
+        result["status"] = "FAILED"
+        result["error"] = e
+    else:
+        result["status"] = "SUCCESS"
+
+    return result
