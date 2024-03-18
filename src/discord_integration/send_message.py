@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import json
 
-WEBHOOK = os.getenv("DISORD_WEBHOOK")
+WEBHOOK = os.getenv("DISCORD_WEBHOOK")
 
 
 class WebhookRequest:
