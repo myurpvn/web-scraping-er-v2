@@ -3,7 +3,7 @@ import pandas as pd
 import os
 import json
 
-WEBHOOK = os.getenv("DISCORD_WEBHOOK")
+DISCORD_WEBHOOK = os.getenv("DISCORD_WEBHOOK")
 
 
 class WebhookRequest:
@@ -19,7 +19,9 @@ TEMPLATE = {
 def post_message(payload: str) -> Response:
     try:
         response = post(
-            WEBHOOK, json.dumps(payload), headers={"Content-type": "application/json"}
+            DISCORD_WEBHOOK,
+            json.dumps(payload),
+            headers={"Content-type": "application/json"},
         )
         if not str(response.status_code).startswith("2"):
             raise Exception(
@@ -57,11 +59,12 @@ def send_dataframe_as_text(df: pd.DataFrame) -> None:
     base = df["home_currency"].iloc[0]
     content = ""
     for row in df.values:
-        if len(content) >= 1999:
+        if len(content) >= 1900:
+            content += "<<DISCORD CONTENT LIMIT REACHED>>"
             break
         else:
-            content += f"1 {row[1]} => {round(row[3], 3)} {base}\n"
+            content += f"1 {row[1]} > {round(row[3], 3)} {base}\n"
 
     payload = TEMPLATE
     payload["content"] = content
-    response = post_message(json.dumps)
+    response = post_message(payload)

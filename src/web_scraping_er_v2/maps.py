@@ -7,6 +7,10 @@ import os
 from src.common.logger import logger
 
 
+cc_map_dir = "maps/currency_country_map.yaml"
+sub_map_dir = "maps/subscription_map.yaml"
+
+
 def update_cc_map(currency_code_map: dict[str, dict], currency_code: str) -> list[str]:
     url = f"https://restcountries.com/v3.1/currency/{currency_code}?fields=name"
     try:
@@ -19,7 +23,7 @@ def update_cc_map(currency_code_map: dict[str, dict], currency_code: str) -> lis
 
 
 def read_cc_map() -> dict[str, dict]:
-    with open("currency_country_map.yaml", "r") as file:
+    with open(cc_map_dir, "r") as file:
         return yaml.safe_load(file)
 
 
@@ -27,7 +31,21 @@ def write_cc_map(
     data: dict[str, dict], currency_code: str, country_list: list[str]
 ) -> None:
     data[currency_code] = {"countries": list(set(country_list))}
-    with open("currency_country_map.yaml", "w") as file:
+    with open(cc_map_dir, "w") as file:
+        yaml.dump(data, file)
+
+
+def read_sub_map() -> list[str]:
+    with open(sub_map_dir, "r") as file:
+        return yaml.safe_load(file)["subscription_list"]
+
+
+def update_sub_map(currency_code: str) -> None:
+    data = read_sub_map()
+    sub_list = data["subscription_list"]
+    sub_list.append(currency_code)
+    data = {"subscription_list": list(set(sub_list))}
+    with open(sub_map_dir, "w") as file:
         yaml.dump(data, file)
 
 
@@ -40,7 +58,7 @@ def get_cc_map_country_list(
     if currency_code == "VEF":  # bug on x-rates site for VENEZUELAN BOLIVAR
         currency_code = "VES"
 
-    if os.path.exists("currency_country_map.yaml"):
+    if os.path.exists(cc_map_dir):
         currency_code_map = read_cc_map()
         if currency_code in currency_code_map.keys():
             country_list = currency_code_map[currency_code]["countries"]

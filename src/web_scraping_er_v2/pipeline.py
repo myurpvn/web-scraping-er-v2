@@ -2,15 +2,15 @@ from requests import get
 from bs4 import BeautifulSoup
 import pandas as pd
 
-from src.web_scraping_er_v2.currency_map import get_cc_map_country_list, generate_cc_map_df
+from web_scraping_er_v2.maps import get_cc_map_country_list, generate_cc_map_df, read_sub_map
 from src.web_scraping_er_v2.load_to_bq import bq_load_daily, bq_load_map
-from src.discord_integration.send_message import send_simple_text
+from src.discord_integration.send_message import send_simple_text, send_dataframe_as_text
 from src.common.logger import logger
 
 def pipeline(base_currency):
-    logger.info("Staring Script", base_currency=base_currency)
+    logger.info("Staring script", base_currency=base_currency)
     
-    logger.info("Getting Website data")
+    logger.info("Getting website data")
     exchange_rate_map = {}
     response = get(f"https://www.x-rates.com/table/?from={base_currency}&amount=1")
     
@@ -36,7 +36,7 @@ def pipeline(base_currency):
                 "value": float(curr_value),
             }
 
-    logger.info("Builing Dataframe")
+    logger.info("Building DataFrame")
     exchange_rates_df = pd.DataFrame(
         data=exchange_rate_map.values(), index=exchange_rate_map.keys()
     )
@@ -44,9 +44,15 @@ def pipeline(base_currency):
     # exchange_rates_df.to_csv("sample_rates.csv", index=False)
     logger.info("Running Daily refresh")
     result = bq_load_daily(exchange_rates_df, base_currency)
-    logger.info("Sending result to Discord", row_count=len(exchange_rates_df))
-    send_simple_text(f"BQ Daily Data Loading: {result["status"]}, error: {result["error"]}")
+    # logger.info("Sending result to Discord", row_count=len(exchange_rates_df))
+    # send_simple_text(f"BQ Daily Data Loading: {result["status"]}, error: {result["error"]}")
     # send_dataframe_as_text(exchange_rates_df)
+
+    # checking and sending subscribed exchange-rates
+    sub_list = read_sub_map()
+    logger.info("Sending ex-rates", subscribed=sub_list)
+    discord_df = exchange_rates_df[exchange_rates_df["foreign_currency"].isin(sub_list)]
+    send_dataframe_as_text(discord_df)
 
     if is_updated:
         map_cc_df = generate_cc_map_df()
