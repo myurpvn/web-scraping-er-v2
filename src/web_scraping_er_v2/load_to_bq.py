@@ -27,19 +27,22 @@ def bq_load_daily(df: pd.DataFrame, base_currency: str) -> dict[str, str]:
     load_time = datetime.now()
     credentials, client = init_bq_connection()
     df["date"] = load_time.strftime("%Y-%m-%d")
+    df["time"] = load_time.strftime("%H:%M:%S")
     df["bq_load_time"] = load_time
     result = {"status": "", "error": "N/A"}
     try:
         table = f"{credentials.project_id}.{dataset}.daily_exchange_rate_base_{base_currency}"
+
         job_config = bigquery.LoadJobConfig(
-            write_disposition="WRITE_APPEND",
+            write_disposition=bigquery.WriteDisposition.WRITE_APPEND,
+            schema_update_options=bigquery.SchemaUpdateOption.ALLOW_FIELD_ADDITION,
         )
         job = client.load_table_from_dataframe(df, table, job_config=job_config)
         job.result()
         table = client.get_table(table)
     except Exception as e:
         result["status"] = "FAILED"
-        result["error"] = e
+        result["error"] = str(e)
     else:
         result["status"] = "SUCCESS"
 
@@ -52,7 +55,7 @@ def bq_load_map(df: pd.DataFrame) -> dict[str, str]:
     try:
         table = f"{credentials.project_id}.{dataset}.currency_country_map"
         job_config = bigquery.LoadJobConfig(
-            write_disposition="WRITE_TRUNCATE",
+            write_disposition=bigquery.WriteDisposition.WRITE_TRUNCATE,
         )
         job = client.load_table_from_dataframe(df, table, job_config=job_config)
         job.result()

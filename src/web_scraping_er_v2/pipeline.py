@@ -44,19 +44,19 @@ def pipeline(base_currency):
     # exchange_rates_df.to_csv("sample_rates.csv", index=False)
     logger.info("Running Daily refresh")
     result = bq_load_daily(exchange_rates_df, base_currency)
-    # logger.info("Sending result to Discord", row_count=len(exchange_rates_df))
-    # send_simple_text(f"BQ Daily Data Loading: {result["status"]}, error: {result["error"]}")
-    # send_dataframe_as_text(exchange_rates_df)
-
-    # checking and sending subscribed exchange-rates
-    sub_list = read_sub_map()
-    logger.info("Sending ex-rates", subscribed=sub_list)
-    discord_df = exchange_rates_df[exchange_rates_df["foreign_currency"].isin(sub_list)]
-    send_dataframe_as_text(discord_df)
+    if result["status"] == "FAILED":
+        logger.info("BQ Load Failed", exception=result["error"])
+        send_simple_text(f"BQ Daily run Failed,  error: {result["error"]}")
+    else:
+        # checking and sending subscribed exchange-rates
+        sub_list = read_sub_map()
+        logger.info("Sending ex-rates", subscribed=sub_list)
+        discord_df = exchange_rates_df[exchange_rates_df["foreign_currency"].isin(sub_list)]
+        send_dataframe_as_text(discord_df)
 
     if is_updated:
         map_cc_df = generate_cc_map_df()
         logger.info("Updating Map table")
         result = bq_load_map(map_cc_df)
-        logger.info("Sending result to Discord", row_count=len(map_cc_df))
-        send_simple_text(f"BQ Map Data Loading: {result["status"]}, error: {result["error"]}")
+        # logger.info("Sending result to Discord", row_count=len(map_cc_df))
+        # send_simple_text(f"BQ Map Data Loading: {result["status"]}, error: {result["error"]}")
