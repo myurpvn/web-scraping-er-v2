@@ -1,12 +1,14 @@
 from google.cloud import bigquery
 from google.oauth2.service_account import Credentials
 from datetime import datetime
+import pytz
 import pandas as pd
 import base64
 import json
 import os
 
 
+tz = pytz.timezone("Asia/Colombo")
 dataset = "exchange_rates"
 
 
@@ -24,7 +26,7 @@ def init_bq_connection() -> tuple[Credentials, bigquery.Client]:
 
 
 def bq_load_daily(df: pd.DataFrame, base_currency: str) -> dict[str, str]:
-    load_time = datetime.now()
+    load_time = datetime.now(tz)
     credentials, client = init_bq_connection()
     df["date"] = load_time.strftime("%Y-%m-%d")
     df["time"] = load_time.strftime("%H:%M:%S")
