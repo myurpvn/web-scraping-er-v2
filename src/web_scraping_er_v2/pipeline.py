@@ -5,6 +5,7 @@ import pandas as pd
 from web_scraping_er_v2.maps import get_cc_map_country_list, generate_cc_map_df, read_sub_map
 from src.web_scraping_er_v2.load_to_bq import bq_load_daily, bq_load_map
 from src.discord_integration.send_message import send_simple_text, send_dataframe_as_text
+from src.common.utils import update_last_runtime
 from src.common.logger import logger
 
 def pipeline(base_currency):
@@ -60,3 +61,6 @@ def pipeline(base_currency):
         result = bq_load_map(map_cc_df)
         # logger.info("Sending result to Discord", row_count=len(map_cc_df))
         # send_simple_text(f"BQ Map Data Loading: {result["status"]}, error: {result["error"]}")
+
+    update_last_runtime()
+    
