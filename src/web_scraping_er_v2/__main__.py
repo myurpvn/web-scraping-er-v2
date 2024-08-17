@@ -14,6 +14,7 @@ def main(
     currency: Annotated[
         str,
         typer.Option(
+            "--currency",
             "-c",
         ),
     ] = "LKR"
