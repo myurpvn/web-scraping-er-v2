@@ -28,7 +28,9 @@ jobs:
         env:
             GOOGLE_CREDENTIALS_B64: ${{ secrets.GOOGLE_CREDENTIALS_B64 }}
             DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
-        run: poetry run exchange-rates-pipeline
+        run: |
+          poetry --version
+          poetry run exchange-rates-pipeline
 
       - name: commit files
         run: |
